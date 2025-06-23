@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirmação - Chá Evelyn</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Confirmação de Presença</h1>
+    <p>📍 Local: Alameda dos Jacarandás, 1100 – Vale das acacias</p>
+    <p>⚠️ Trazer: Traje de banho, toalha e roupa de cama</p>
+    <p>🍷 Traga sua bebida de preferência</p>
+    <p>🎁 Sugestão de presente: <span id="presente">Fralda M + mimo</span></p>
+
+    <form id="form">
+      <label for="nome">Seu nome:</label>
+      <input type="text" id="nome" required />
+      <button type="submit">Confirmar Presença</button>
+    </form>
+
+    <div id="admin-section" style="display: none;">
+      <h2>Confirmados:</h2>
+      <ul id="lista-confirmados"></ul>
+      <button onclick="exportarLista()">📁 Baixar Lista</button>
+    </div>
+
+    <div id="senha-container">
+      <label for="senha">🔒 Área restrita a Erika:</label>
+      <input type="password" id="senha" />
+      <button onclick="verificarSenha()">Acessar</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <audio id="musica" loop>
+    <source src="musica.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    window.addEventListener('load', () => {
+      const musica = document.getElementById('musica');
+      musica.play().catch(() => {
+        console.log('Autoplay bloqueado em convidados.html, aguardando interação do usuário');
+      });
+    });
+  </script>
+</body>
+</html>

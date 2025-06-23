@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chá de Bebê Evelyn Maria</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="inicio">
+  <div class="container">
+    <h1>Erika e Reginaldo te convidam para o</h1>
+    <h2>Chá de Bebê de <span>Evelyn Maria</span></h2>
+    <p>📅 06/09/2025 às 19:30</p> 
+    <p>📍 Alameda dos Jacarandás, 1100 - Vale das acacias</p>
+    <a href="convidados.html" class="botao">Confirmar Presença</a>
+  </div>
+
+  <audio id="musica" loop>
+    <source src="musica.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    window.addEventListener('load', () => {
+      const musica = document.getElementById('musica');
+      musica.play().catch(() => {
+        console.log('Autoplay bloqueado no index.html, aguardando interação do usuário');
+      });
+    });
+  </script>
+</body>
+</html>

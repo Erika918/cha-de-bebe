@@ -1,0 +1,65 @@
+ body {
+  font-family: "Georgia", serif;
+  background: linear-gradient(to right, #ffe6f0, #e6ccff);
+  color: #4b006e;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1, h2 {
+  color: #990099;
+}
+
+span {
+  font-size: 2em;
+  font-weight: bold;
+  color: #d63384;
+}
+
+.botao {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #990099;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fdf2f8;
+}
+
+th {
+  background-color: #f8d7f7;
+  color: #600060;
+}
+.menu {
+  text-align: left;
+  padding: 0 20px;
+  list-style-type: square;
+}
+
+.menu li {
+  margin: 10px 0;
+  font-size: 1.1em;
+}
