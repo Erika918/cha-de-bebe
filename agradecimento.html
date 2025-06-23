@@ -15,19 +15,34 @@
     <a href="index.html" class="botao">Voltar ao Início</a>
   </div>
 
-  <!-- Música de fundo (sem autoplay direto, com script para tentar tocar) -->
+  <!-- Música de fundo (com fallback para interação) -->
   <audio id="musica" loop>
     <source src="musica.mp3" type="audio/mpeg" />
     Seu navegador não suporta áudio.
   </audio>
 
   <script>
-    window.addEventListener('load', () => {
-      const musica = document.getElementById('musica');
-      musica.play().catch(() => {
-        console.log('Autoplay bloqueado, aguardando interação do usuário');
-        // Aqui você pode adicionar um botão para ativar a música manualmente, se quiser
-      });
+    const musica = document.getElementById('musica');
+
+    // Tenta tocar automaticamente
+    musica.play().catch(() => {
+      console.log('Autoplay bloqueado, aguardando interação do usuário');
+
+      // Define função para tocar após interação
+      function tocarMusica() {
+        musica.play().catch(() => {
+          console.log('Erro ao tentar tocar música');
+        });
+        // Remove os event listeners após a primeira tentativa
+        window.removeEventListener('click', tocarMusica);
+        window.removeEventListener('scroll', tocarMusica);
+        window.removeEventListener('keydown', tocarMusica);
+      }
+
+      // Escuta interação do usuário
+      window.addEventListener('click', tocarMusica);
+      window.addEventListener('scroll', tocarMusica);
+      window.addEventListener('keydown', tocarMusica);
     });
   </script>
 </body>

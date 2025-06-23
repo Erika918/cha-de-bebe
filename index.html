@@ -14,19 +14,5 @@
     <p>📍 Alameda dos Jacarandás, 1100 - Vale das acacias</p>
     <a href="convidados.html" class="botao">Confirmar Presença</a>
   </div>
-
-  <audio id="musica" loop>
-    <source src="musica.mp3" type="audio/mpeg" />
-    Seu navegador não suporta áudio.
-  </audio>
-
-  <script>
-    window.addEventListener('load', () => {
-      const musica = document.getElementById('musica');
-      musica.play().catch(() => {
-        console.log('Autoplay bloqueado no index.html, aguardando interação do usuário');
-      });
-    });
-  </script>
 </body>
 </html>

@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Confirmação - Chá Evelyn</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Estilo direto aqui, ou mova para style.css se preferir */
+    button[type="submit"] {
+      background-color: #d55dbd; /* rosa roxo */
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #b1489d;
+    }
+
+    /* Espaçamento entre formulário e área restrita */
+    #senha-container {
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -20,7 +48,7 @@
       <button type="submit">Confirmar Presença</button>
     </form>
 
-    <div id="admin-section" style="display: none;">
+    <div id="admin-section" style="display: none; margin-top: 30px;">
       <h2>Confirmados:</h2>
       <ul id="lista-confirmados"></ul>
       <button onclick="exportarLista()">📁 Baixar Lista</button>
@@ -33,20 +61,30 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
-
   <audio id="musica" loop>
     <source src="musica.mp3" type="audio/mpeg" />
     Seu navegador não suporta áudio.
   </audio>
 
+  <script src="script.js"></script>
+
   <script>
-    window.addEventListener('load', () => {
-      const musica = document.getElementById('musica');
+    const musica = document.getElementById('musica');
+
+    // Tocar o áudio só após interação do usuário (click, scroll, keydown)
+    function tocarMusica() {
       musica.play().catch(() => {
-        console.log('Autoplay bloqueado em convidados.html, aguardando interação do usuário');
+        console.log('Erro ao tentar tocar música');
       });
-    });
+      // Remove os event listeners para não tentar tocar de novo
+      window.removeEventListener('click', tocarMusica);
+      window.removeEventListener('scroll', tocarMusica);
+      window.removeEventListener('keydown', tocarMusica);
+    }
+
+    window.addEventListener('click', tocarMusica);
+    window.addEventListener('scroll', tocarMusica);
+    window.addEventListener('keydown', tocarMusica);
   </script>
 </body>
 </html>
