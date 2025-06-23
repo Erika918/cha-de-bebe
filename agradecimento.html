@@ -15,7 +15,6 @@
     <a href="index.html" class="botao">Voltar ao Início</a>
   </div>
 
-  <!-- Música de fundo (com fallback para interação) -->
   <audio id="musica" loop>
     <source src="musica.mp3" type="audio/mpeg" />
     Seu navegador não suporta áudio.
@@ -24,25 +23,25 @@
   <script>
     const musica = document.getElementById('musica');
 
-    // Tenta tocar automaticamente
     musica.play().catch(() => {
-      console.log('Autoplay bloqueado, aguardando interação do usuário');
-
-      // Define função para tocar após interação
       function tocarMusica() {
-        musica.play().catch(() => {
-          console.log('Erro ao tentar tocar música');
-        });
-        // Remove os event listeners após a primeira tentativa
+        musica.play();
         window.removeEventListener('click', tocarMusica);
         window.removeEventListener('scroll', tocarMusica);
         window.removeEventListener('keydown', tocarMusica);
       }
-
-      // Escuta interação do usuário
       window.addEventListener('click', tocarMusica);
       window.addEventListener('scroll', tocarMusica);
       window.addEventListener('keydown', tocarMusica);
+    });
+
+    // Detectar se chegou ao final da página
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        setTimeout(() => {
+          window.location.href = 'convidados.html';
+        }, 2000); // espera 2 segundos
+      }
     });
   </script>
 </body>
