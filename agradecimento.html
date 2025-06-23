@@ -11,18 +11,17 @@
     <h1>Obrigado pela sua presença! 🎉</h1>
     <p>Com carinho,</p>
     <h2>Erika Barbosa da Cruz & Reginaldo de Oliveira</h2>
-
-    <a href="index.html" class="botao">Voltar ao Início</a>
   </div>
 
+  <!-- Música de fundo -->
   <audio id="musica" loop>
     <source src="musica.mp3" type="audio/mpeg" />
     Seu navegador não suporta áudio.
   </audio>
 
   <script>
+    // Toca música após interação
     const musica = document.getElementById('musica');
-
     musica.play().catch(() => {
       function tocarMusica() {
         musica.play();
@@ -35,14 +34,10 @@
       window.addEventListener('keydown', tocarMusica);
     });
 
-    // Detectar se chegou ao final da página
-    window.addEventListener('scroll', () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        setTimeout(() => {
-          window.location.href = 'convidados.html';
-        }, 2000); // espera 2 segundos
-      }
-    });
+    // Redireciona automaticamente para a página inicial após 5 segundos
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 5000); // 5000 milissegundos = 5 segundos
   </script>
 </body>
 </html>
