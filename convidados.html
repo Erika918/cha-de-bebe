@@ -35,7 +35,7 @@
 <body>
   <div class="container">
     <h1>Confirmação de Presença</h1>
-    <p>📍 Local: Alameda dos Jacarandás, 1100 – Vale das acacias</p>
+    <p>📍 Local: Alameda dos Jacarandás, 1100 – Vale das Acácias</p>
     <p>⚠️ Trazer: Traje de banho, toalha</p>
     <p>🍷 Traga sua bebida de preferência</p>
     <p>🎁 Sugestão de presente: <span id="presente">Fralda M + mimo</span></p>
@@ -83,16 +83,16 @@
     window.addEventListener('scroll', tocarMusica);
     window.addEventListener('keydown', tocarMusica);
 
-    // Enviar formulário para Google Apps Script
     function enviarFormulario(event) {
       event.preventDefault();
 
       const nome = document.getElementById("nome").value;
       const presenca = document.querySelector('input[name="presenca"]:checked').value;
+      const presente = document.getElementById("presente").innerText;
 
-      fetch("https://script.google.com/macros/s/AKfycbwhqbOpAch705S8hNj52uQopSxz0ial5q9WoudiZb_VffEFNeHGnZSSFvFiFsxn_-8/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzinETNSQ3eyyC1Sv1ooW2ar7FGqxw5tL7O_HcF4RcVlwxaPPHMxL9He7w7VqOPJyc/exec", {
         method: "POST",
-        body: JSON.stringify({ nome, presenca }),
+        body: JSON.stringify({ nome, presenca, presente, }),
         headers: {
           "Content-Type": "application/json"
         }
@@ -100,7 +100,7 @@
       .then(response => response.text())
       .then(data => {
         alert("Confirmação enviada com sucesso!");
-        window.location.href = "agradecimento.html"; // redireciona
+        window.location.href = "agradecimento.html";
       })
       .catch(error => {
         alert("Erro ao enviar: " + error);
