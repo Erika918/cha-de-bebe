@@ -67,6 +67,27 @@
     Seu navegador não suporta áudio.
   </audio>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCogG96fMtt3bp6Xx84si3wk8cugN9aRHI",
+      authDomain: "cha-de-bebe-evelyn.firebaseapp.com",
+      projectId: "cha-de-bebe-evelyn",
+      storageBucket: "cha-de-bebe-evelyn.firebasestorage.app",
+      messagingSenderId: "505877059168",
+      appId: "1:505877059168:web:fc9c05111e97702cca1505",
+      databaseURL: "https://cha-de-bebe-evelyn-default-rtdb.firebaseio.com"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+  </script>
+
+  <!-- Scripts do site -->
   <script>
     const musica = document.getElementById('musica');
 
@@ -90,20 +111,20 @@
       const presenca = document.querySelector('input[name="presenca"]:checked').value;
       const presente = document.getElementById("presente").innerText;
 
-      fetch("https://script.google.com/macros/s/AKfycbzinETNSQ3eyyC1Sv1ooW2ar7FGqxw5tL7O_HcF4RcVlwxaPPHMxL9He7w7VqOPJyc/exec", {
-        method: "POST",
-        body: JSON.stringify({ nome, presenca, presente, }),
-        headers: {
-          "Content-Type": "application/json"
-        }
+      // Salvar no Firebase
+      const confirmacaoRef = database.ref("confirmacoes");
+      confirmacaoRef.push({
+        nome,
+        presenca,
+        presente,
+        dataHora: new Date().toISOString()
       })
-      .then(response => response.text())
-      .then(data => {
+      .then(() => {
         alert("Confirmação enviada com sucesso!");
         window.location.href = "agradecimento.html";
       })
-      .catch(error => {
-        alert("Erro ao enviar: " + error);
+      .catch((error) => {
+        alert("Erro ao enviar: " + error.message);
       });
     }
   </script>
