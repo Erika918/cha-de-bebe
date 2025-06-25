@@ -5,60 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Confirmação - Chá Evelyn</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    button[type="submit"] {
-      background-color: #d55dbd;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #b1489d;
-    }
-
-    #senha-container {
-      margin-top: 40px;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <h1>Confirmação de Presença</h1>
-    <p>📍 Local: Alameda dos Jacarandás, 1100 – Vale das Acácias</p>
+    <p>📍 Alameda dos Jacarandás, 1100 – Vale das Acácias</p>
     <p>⚠️ Trazer: Traje de banho, toalha</p>
     <p>🍷 Traga sua bebida de preferência</p>
     <p>🎁 Sugestão de presente: <span id="presente">Fralda M + mimo</span></p>
 
     <form id="form" onsubmit="enviarFormulario(event)">
-      <label for="nome">Seu nome:</label>
-      <input type="text" id="nome" required />
+      <label for="nome">Seu nome:</label><br>
+      <input type="text" id="nome" required /><br><br>
+
       <p>Você vai comparecer?</p>
       <label><input type="radio" name="presenca" value="Sim" required> Sim</label>
-      <label><input type="radio" name="presenca" value="Não"> Não</label><br>
-      <button type="submit">Confirmar Presença</button>
+      <label><input type="radio" name="presenca" value="Não"> Não</label><br><br>
+
+      <button type="submit" class="botao">Confirmar Presença</button>
     </form>
 
-    <div id="admin-section" style="display: none; margin-top: 30px;">
-      <h2>Confirmados:</h2>
-      <ul id="lista-confirmados"></ul>
-      <button onclick="exportarLista()">📁 Baixar Lista</button>
+    <div id="senha-container" style="margin-top: 40px;">
+      <h3>🔒 Acesso restrito à Erika:</h3>
+      <input type="password" id="senha" placeholder="Digite a senha" />
+      <button onclick="verificarSenha()" class="botao">Acessar Lista</button>
     </div>
 
-    <div id="senha-container">
-      <label for="senha">🔒 Área restrita a Erika:</label>
-      <input type="password" id="senha" />
-      <button onclick="verificarSenha()">Acessar</button>
+    <div id="admin-section" style="display: none;">
+      <h2>Lista de Confirmados</h2>
+      <ul id="lista-confirmados"></ul>
+      <button onclick="exportarLista()" class="botao">📁 Baixar Lista</button>
     </div>
   </div>
 
@@ -67,34 +43,11 @@
     Seu navegador não suporta áudio.
   </audio>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
-
-  <!-- Firebase Config -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCogG96fMtt3bp6Xx84si3wk8cugN9aRHI",
-      authDomain: "cha-de-bebe-evelyn.firebaseapp.com",
-      projectId: "cha-de-bebe-evelyn",
-      storageBucket: "cha-de-bebe-evelyn.firebasestorage.app",
-      messagingSenderId: "505877059168",
-      appId: "1:505877059168:web:fc9c05111e97702cca1505",
-      databaseURL: "https://cha-de-bebe-evelyn-default-rtdb.firebaseio.com"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-  </script>
-
-  <!-- Scripts do site -->
   <script>
     const musica = document.getElementById('musica');
 
     function tocarMusica() {
-      musica.play().catch(() => {
-        console.log('Erro ao tentar tocar música');
-      });
+      musica.play().catch(() => {});
       window.removeEventListener('click', tocarMusica);
       window.removeEventListener('scroll', tocarMusica);
       window.removeEventListener('keydown', tocarMusica);
@@ -104,29 +57,66 @@
     window.addEventListener('scroll', tocarMusica);
     window.addEventListener('keydown', tocarMusica);
 
+    let confirmados = JSON.parse(localStorage.getItem('confirmados')) || [];
+
     function enviarFormulario(event) {
       event.preventDefault();
-
-      const nome = document.getElementById("nome").value;
+      const nome = document.getElementById("nome").value.trim();
       const presenca = document.querySelector('input[name="presenca"]:checked').value;
-      const presente = document.getElementById("presente").innerText;
+      const presenteAtual = confirmados.length % 4 < 2 ? "Fralda M + mimo" : "Fralda G + mimo";
 
-      // Salvar no Firebase
-      const confirmacaoRef = database.ref("confirmacoes");
-      confirmacaoRef.push({
+      const novoRegistro = {
         nome,
         presenca,
-        presente,
-        dataHora: new Date().toISOString()
-      })
-      .then(() => {
-        alert("Confirmação enviada com sucesso!");
-        window.location.href = "agradecimento.html";
-      })
-      .catch((error) => {
-        alert("Erro ao enviar: " + error.message);
+        presente: presenteAtual,
+        dataHora: new Date().toLocaleString()
+      };
+
+      confirmados.push(novoRegistro);
+      localStorage.setItem('confirmados', JSON.stringify(confirmados));
+
+      alert("Confirmação enviada com sucesso!");
+      window.location.href = "agradecimento.html";
+    }
+
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      if (senha === "erika123") {
+        document.getElementById("admin-section").style.display = "block";
+        mostrarConfirmados();
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
+
+    function mostrarConfirmados() {
+      const lista = document.getElementById("lista-confirmados");
+      lista.innerHTML = "";
+      confirmados.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.nome} - ${item.presenca} - ${item.presente}`;
+        lista.appendChild(li);
       });
     }
+
+    function exportarLista() {
+      let texto = "Nome,Presença,Presente,Data\n";
+      confirmados.forEach(item => {
+        texto += `${item.nome},${item.presenca},${item.presente},${item.dataHora}\n`;
+      });
+
+      const blob = new Blob([texto], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "confirmados.csv";
+      link.click();
+    }
+
+    // Atualiza sugestão de presente na tela
+    document.addEventListener("DOMContentLoaded", () => {
+      const sugestao = confirmados.length % 4 < 2 ? "Fralda M + mimo" : "Fralda G + mimo";
+      document.getElementById("presente").innerText = sugestao;
+    });
   </script>
 </body>
 </html>
