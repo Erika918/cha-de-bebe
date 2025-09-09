@@ -1,97 +1,80 @@
-// Recupera lista de confirmados e contador salvos no navegador
-let confirmados = JSON.parse(localStorage.getItem('confirmados')) || [];
-let contador = parseInt(localStorage.getItem('contador')) || 0;
+// ============================
+// GALERIA / LIGHTBOX
+// ============================
+let items = [];
+let currentIndex = 0;
 
-// URL do seu script Google Apps Script (substitua por sua URL final se mudar)
-const scriptURL = "https://script.google.com/macros/s/AKfycbzinETNSQ3eyyC1Sv1ooW2ar7FGqxw5tL7O_HcF4RcVlwxaPPHMxL9He7w7VqOPJyc/exec";
+// Carregar arquivos do JSON (arquivos.json)
+fetch('arquivos.json')
+  .then(res => res.json())
+  .then(data => {
+    items = data;
+    const galeria = document.getElementById('galeria');
 
-// Evento de envio do formulário
-document.getElementById('form').addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const nome = document.getElementById('nome').value.trim();
-
-  if (nome) {
-    contador++;
-
-    const tipoFralda = contador % 2 === 0 ? 'Fralda G' : 'Fralda M';
-    const presente = `${tipoFralda} + mimo`;
-
-    // Adiciona localmente
-    confirmados.push({ nome, fralda: tipoFralda });
-
-    // Salva no localStorage
-    localStorage.setItem('confirmados', JSON.stringify(confirmados));
-    localStorage.setItem('contador', contador);
-
-    atualizarLista();
-    atualizarPresente();
-
-    // Envia para a planilha via Apps Script
-    fetch(scriptURL, {
-      method: "POST",
-      body: JSON.stringify({ nome, presenca: "Sim", presente }),
-      headers: {
-        "Content-Type": "application/json"
+    items.forEach((item, index) => {
+      if(item.type === 'image'){
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = "Foto do Chá da Evelyn";
+        img.onclick = () => openLightbox(index);
+        galeria.appendChild(img);
+      } else if(item.type === 'video'){
+        const vid = document.createElement('video');
+        vid.src = item.src;
+        vid.controls = true;
+        vid.onclick = () => openLightbox(index);
+        galeria.appendChild(vid);
       }
-    })
-    .then(response => response.text())
-    .then(data => {
-      alert(`Obrigada, ${nome}! Sua presença foi confirmada 🎉`);
-      document.getElementById('nome').value = '';
-      setTimeout(() => {
-        window.location.href = "agradecimento.html";
-      }, 1000);
-    })
-    .catch(error => {
-      alert("Erro ao enviar para a planilha: " + error);
     });
-  }
-});
-
-// Atualiza a lista de confirmados
-function atualizarLista() {
-  const lista = document.getElementById('lista-confirmados');
-  if (!lista) return;
-
-  lista.innerHTML = '';
-
-  confirmados.forEach((pessoa, index) => {
-    const li = document.createElement('li');
-    li.textContent = `${index + 1}. ${pessoa.nome} — ${pessoa.fralda} + mimo`;
-    lista.appendChild(li);
   });
-}
 
-// Atualiza sugestão de presente
-function atualizarPresente() {
-  const spanPresente = document.getElementById('presente');
-  if (!spanPresente) return;
+// Elementos do lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxVideo = document.getElementById('lightbox-video');
+const closeBtn = document.querySelector(".lightbox .close");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
-  const tipo = contador % 2 === 0 ? 'Fralda G + mimo' : 'Fralda M + mimo';
-  spanPresente.textContent = tipo;
-}
+// Botão abrir em nova aba
+const abrirNovaAbaBtn = document.getElementById("abrir-nova-aba");
+abrirNovaAbaBtn.onclick = () => {
+  const item = items[currentIndex];
+  window.open(item.src, '_blank');
+};
 
-// Exporta a lista para visualização rápida
-function exportarLista() {
-  const texto = confirmados.map(p => `${p.nome} - ${p.fralda}`).join('\n');
-  alert(`Lista de confirmados:\n${texto}`);
-}
+// Função abrir lightbox
+function openLightbox(index){
+  const item = items[index];
+  currentIndex = index;
 
-// Verifica a senha e exibe a lista
-function verificarSenha() {
-  const senha = document.getElementById('senha').value.trim();
-  if (senha === 'evelyn2025') {
-    document.getElementById('admin-section').style.display = 'block';
-    document.getElementById('senha-container').style.display = 'none';
-    atualizarLista();
+  if(item.type === 'video'){
+    lightboxVideo.style.display = 'block';
+    lightboxImg.style.display = 'none';
+    lightboxVideo.src = item.src;
+    lightboxVideo.play();
   } else {
-    alert('Senha incorreta!');
+    lightboxImg.style.display = 'block';
+    lightboxVideo.style.display = 'none';
+    lightboxVideo.pause();
+    lightboxImg.src = item.src;
   }
+
+  lightbox.style.display = 'flex';
 }
 
-// Carrega a sugestão e lista ao abrir a página
-window.addEventListener('DOMContentLoaded', () => {
-  atualizarLista();
-  atualizarPresente();
-});
+// Fechar lightbox
+closeBtn.onclick = () => { 
+  lightbox.style.display = 'none'; 
+  lightboxVideo.pause(); 
+};
+
+// Navegação
+prevBtn.onclick = () => { 
+  currentIndex = (currentIndex - 1 + items.length) % items.length; 
+  openLightbox(currentIndex); 
+};
+nextBtn.onclick = () => { 
+  currentIndex = (currentIndex + 1) % items.length; 
+  openLightbox(currentIndex); 
+};
