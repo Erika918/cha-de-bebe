@@ -6,30 +6,60 @@
   <title>Momentos – Chá Evelyn</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* === Galeria de Miniaturas === */
     .galeria {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
       justify-content: center;
       margin: 20px 0;
     }
 
+    .foto-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
     .galeria img, .galeria video {
-      width: 150px;
-      height: 100px;
+      width: 160px;
+      height: 110px;
       object-fit: cover;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 12px;
       transition: transform 0.3s, box-shadow 0.3s;
+      animation: flutuar 3s ease-in-out infinite;
+    }
+
+    @keyframes flutuar {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
     }
 
     .galeria img:hover, .galeria video:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      animation: pulsar 0.6s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(255, 111, 97, 0.6);
     }
 
-    /* === Lightbox === */
+    @keyframes pulsar {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Legenda */
+    .legenda {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #ff6f61;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    /* Lightbox */
     .lightbox {
       display: none;
       position: fixed;
@@ -47,6 +77,12 @@
       max-width: 90%;
       max-height: 80%;
       border-radius: 8px;
+      animation: aparecer 0.5s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .lightbox .close {
@@ -59,7 +95,6 @@
       z-index: 1010;
     }
 
-    /* Botão abrir em nova aba */
     .lightbox #abrir-nova-aba {
       position: absolute;
       top: 20px;
@@ -72,9 +107,12 @@
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
+      transition: 0.3s;
+    }
+    .lightbox #abrir-nova-aba:hover {
+      background-color: #ff3b2f;
     }
 
-    /* Navegação (setas) */
     .nav span {
       position: absolute;
       top: 50%;
@@ -90,12 +128,10 @@
     #prev { left: 0; }
     #next { right: 0; }
 
-    /* Mostrar setas ao passar o mouse no lightbox */
     .lightbox:hover .nav span {
       opacity: 1;
     }
 
-    /* Botão voltar melhorado */
     .botao {
       display: inline-block;
       padding: 10px 20px;
@@ -121,7 +157,6 @@
 
     <div class="galeria" id="galeria"></div>
 
-    <!-- Lightbox -->
     <div id="lightbox" class="lightbox">
       <span class="close">&times;</span>
       <button id="abrir-nova-aba">Abrir em nova aba</button>
@@ -140,7 +175,39 @@
     let items = [];
     let currentIndex = 0;
 
-    // Carregar arquivos do JSON
+    // Lista de fotos que terão legenda
+    const fotosComMensagem = [
+      "IMG-20250921-WA0091.jpg",
+      "IMG-20250921-WA0092.jpg",
+      "IMG-20250921-WA0093.jpg",
+      "IMG-20250921-WA0094.jpg",
+      "IMG-20250921-WA0095.jpg",
+      "IMG-20250921-WA0098.jpg",
+      "IMG-20250921-WA0101.jpg",
+      "IMG-20250921-WA0102.jpg",
+      "IMG-20250921-WA0103.jpg",
+      "IMG-20250921-WA0104.jpg",
+      "IMG-20250921-WA0118.jpg",
+      "IMG-20250921-WA0119.jpg",
+      "IMG-20250921-WA0120.jpg",
+      "IMG-20250921-WA0122.jpg",
+      "IMG-20250921-WA0123.jpg",
+      "IMG-20250921-WA0125.jpg",
+      "IMG-20250921-WA0126.jpg",
+      "IMG-20250921-WA0127.jpg",
+      "IMG-20250921-WA0128.jpg",
+      "IMG-20250921-WA0129.jpg",
+      "IMG-20250921-WA0130.jpg",
+      "IMG-20250923-WA0013.jpg",
+      "IMG-20250923-WA0014.jpg",
+      "IMG-20250923-WA0015.jpg",
+      "IMG-20250923-WA0016.jpg",
+      "IMG-20250923-WA0017.jpg",
+      "IMG-20250923-WA0018.jpg",
+      "IMG-20250923-WA0019.jpg",
+      "IMG-20250923-WA0020.jpg"
+    ];
+
     fetch('arquivos.json')
       .then(res => res.json())
       .then(data => {
@@ -149,11 +216,26 @@
 
         items.forEach((item, index) => {
           if(item.type === 'image'){
+            const container = document.createElement('div');
+            container.classList.add('foto-container');
+
             const img = document.createElement('img');
             img.src = item.src;
             img.alt = "Foto do Chá da Evelyn";
             img.onclick = () => openLightbox(index);
-            galeria.appendChild(img);
+
+            container.appendChild(img);
+
+            // Se a foto estiver na lista, adiciona a legenda
+            const fileName = item.src.split('/').pop();
+            if(fotosComMensagem.includes(fileName)){
+              const legenda = document.createElement('div');
+              legenda.classList.add('legenda');
+              legenda.innerText = "12/09/2025 💕 Sua Chegada foi tão Linda 💕";
+              container.appendChild(legenda);
+            }
+
+            galeria.appendChild(container);
           } else if(item.type === 'video'){
             const vid = document.createElement('video');
             vid.src = item.src;
@@ -164,7 +246,6 @@
         });
       });
 
-    // Elementos do lightbox
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxVideo = document.getElementById('lightbox-video');
@@ -173,7 +254,6 @@
     const nextBtn = document.getElementById("next");
     const abrirNovaAbaBtn = document.getElementById("abrir-nova-aba");
 
-    // Abrir lightbox
     function openLightbox(index){
       const item = items[index];
       currentIndex = index;
@@ -191,14 +271,10 @@
       lightbox.style.display = 'flex';
     }
 
-    // Fechar lightbox
     closeBtn.onclick = () => { lightbox.style.display = 'none'; lightboxVideo.pause(); };
-
-    // Navegação
     prevBtn.onclick = () => { currentIndex = (currentIndex - 1 + items.length) % items.length; openLightbox(currentIndex); };
     nextBtn.onclick = () => { currentIndex = (currentIndex + 1) % items.length; openLightbox(currentIndex); };
 
-    // Abrir em nova aba
     abrirNovaAbaBtn.onclick = () => {
       const item = items[currentIndex];
       window.open(item.src, '_blank');

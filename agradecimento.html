@@ -5,6 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agradecimento</title>
   <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* Galeria */
+    .galeria {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .foto-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .galeria img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .galeria img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,111,97,0.6);
+    }
+    .legenda {
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #ff6f61;
+      background: rgba(255,255,255,0.8);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top:0; left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+      overflow: auto;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .lightbox .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+    }
+    .lightbox .info {
+      color: #fff;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .lightbox .botoes {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .lightbox button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #abrir-nova-aba { background: #ff6f61; color: white; }
+    #compartilhar { background: #61b3ff; color: white; }
+    .nav span {
+      position: absolute;
+      top:50%;
+      font-size:50px;
+      color:white;
+      cursor:pointer;
+      user-select:none;
+      padding:0 20px;
+      opacity:0;
+      transition: opacity 0.3s;
+    }
+    #prev { left:0; }
+    #next { right:0; }
+    .lightbox:hover .nav span { opacity:1; }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -13,14 +112,32 @@
     <h2>Erika Barbosa da Cruz & Reginaldo de Oliveira</h2>
   </div>
 
-  <!-- Música de fundo -->
+  <!-- Galeria -->
+  <div class="galeria" id="galeria"></div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <div class="info">✨ Meu Chá de Bebê – 06/09 ✨</div>
+    <div class="botoes">
+      <button id="abrir-nova-aba">Abrir em nova aba</button>
+      <button id="compartilhar">Compartilhar</button>
+    </div>
+    <div class="nav">
+      <span id="prev">&#10094;</span>
+      <span id="next">&#10095;</span>
+    </div>
+  </div>
+
+  <!-- Música -->
   <audio id="musica" loop>
     <source src="musica.mp3" type="audio/mpeg" />
     Seu navegador não suporta áudio.
   </audio>
 
   <script>
-    // Toca música após interação
+    // Música com interação
     const musica = document.getElementById('musica');
     musica.play().catch(() => {
       function tocarMusica() {
@@ -34,10 +151,174 @@
       window.addEventListener('keydown', tocarMusica);
     });
 
-    // Redireciona automaticamente para a página inicial após 5 segundos
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 5000); // 5000 milissegundos = 5 segundos
+    // Lista completa das fotos (copiar e colar todas as que você enviou)
+    const items = [
+      { src: "fotos/IMG_20250906_153524.jpg" },
+      { src: "fotos/IMG_20250907_073959.jpg" },
+      { src: "fotos/IMG_20250907_074035.jpg" },
+      { src: "fotos/IMG_20250907_110213.jpg" },
+      { src: "fotos/IMG_20250907_114421.jpg" },
+      { src: "fotos/IMG_20250907_114425.jpg" },
+      { src: "fotos/IMG_20250907_114427.jpg" },
+      { src: "fotos/IMG_20250907_114430.jpg" },
+      { src: "fotos/IMG_20250907_114456.jpg" },
+      { src: "fotos/IMG_20250907_114458.jpg" },
+      { src: "fotos/IMG_20250907_114506.jpg" },
+      { src: "fotos/IMG_20250907_114508.jpg" },
+      { src: "fotos/IMG_20250907_114510.jpg" },
+      { src: "fotos/IMG_20250907_114511.jpg" },
+      { src: "fotos/IMG_20250907_114600.jpg" },
+      { src: "fotos/IMG_20250907_114602.jpg" },
+      { src: "fotos/IMG_20250907_123258.jpg" },
+      { src: "fotos/IMG_20250907_123259.jpg" },
+      { src: "fotos/IMG_20250907_123300.jpg" },
+      { src: "fotos/IMG_20250907_123333.jpg" },
+      { src: "fotos/IMG_20250907_123339.jpg" },
+      { src: "fotos/IMG_20250908_115339.jpg" },
+      { src: "fotos/IMG_20250908_115505.jpg" },
+      { src: "fotos/IMG_20250908_124316.jpg" },
+      { src: "fotos/IMG_20250908_125115.jpg" },
+      { src: "fotos/IMG_20250908_130335.jpg" },
+      { src: "fotos/IMG_20250908_132808.jpg" },
+      { src: "fotos/IMG_20250919_142857.jpg" },
+      { src: "fotos/IMG_20250920_111906.jpg" },
+      { src: "fotos/IMG_20250920_214258.jpg" },
+      { src: "fotos/IMG-20250907-WA0000.jpg" },
+      { src: "fotos/IMG-20250907-WA0001.jpg" },
+      { src: "fotos/IMG-20250907-WA0036.jpg" },
+      { src: "fotos/IMG-20250907-WA0037.jpg" },
+      { src: "fotos/IMG-20250907-WA0038.jpg" },
+      { src: "fotos/IMG-20250907-WA0039.jpg" },
+      { src: "fotos/IMG-20250908-WA0005.jpg" },
+      { src: "fotos/IMG-20250908-WA0006.jpg" },
+      { src: "fotos/IMG-20250908-WA0007.jpg" },
+      { src: "fotos/IMG-20250908-WA0008.jpg" },
+      { src: "fotos/IMG-20250908-WA0009.jpg" },
+      { src: "fotos/IMG-20250908-WA0010.jpg" },
+      { src: "fotos/IMG-20250908-WA0011.jpg" },
+      { src: "fotos/IMG-20250908-WA0012.jpg" },
+      { src: "fotos/IMG-20250908-WA0013.jpg" },
+      { src: "fotos/IMG-20250908-WA0014.jpg" },
+      { src: "fotos/IMG-20250908-WA0015.jpg" },
+      { src: "fotos/IMG-20250908-WA0016.jpg" },
+      { src: "fotos/IMG-20250908-WA0017.jpg" },
+      { src: "fotos/IMG-20250908-WA0018.jpg" },
+      { src: "fotos/IMG-20250908-WA0019.jpg" },
+      { src: "fotos/IMG-20250908-WA0020.jpg" },
+      { src: "fotos/IMG-20250908-WA0021.jpg" },
+      { src: "fotos/IMG-20250908-WA0022.jpg" },
+      { src: "fotos/IMG-20250908-WA0023.jpg" },
+      { src: "fotos/IMG-20250908-WA0024.jpg" },
+      { src: "fotos/IMG-20250908-WA0025.jpg" },
+      { src: "fotos/IMG-20250908-WA0026.jpg" },
+      { src: "fotos/IMG-20250908-WA0027.jpg" },
+      { src: "fotos/IMG-20250908-WA0028.jpg" },
+      { src: "fotos/IMG-20250908-WA0029.jpg" },
+      { src: "fotos/IMG-20250908-WA0030.jpg" },
+      { src: "fotos/IMG-20250908-WA0033.jpg" },
+      { src: "fotos/IMG-20250908-WA0038.jpg" },
+      { src: "fotos/IMG-20250908-WA0039.jpg" },
+      { src: "fotos/IMG-20250908-WA0040.jpg" },
+      { src: "fotos/IMG-20250908-WA0041.jpg" },
+      { src: "fotos/IMG-20250908-WA0042.jpg" },
+      { src: "fotos/IMG-20250908-WA0043.jpg" },
+      { src: "fotos/IMG-20250908-WA0044.jpg" },
+      { src: "fotos/IMG-20250908-WA0045.jpg" },
+      { src: "fotos/IMG-20250908-WA0046.jpg" },
+      { src: "fotos/IMG-20250908-WA0047.jpg" },
+      { src: "fotos/IMG-20250908-WA0048.jpg" },
+      { src: "fotos/IMG-20250908-WA0049.jpg" },
+      { src: "fotos/IMG-20250908-WA0050.jpg" },
+      { src: "fotos/IMG-20250908-WA0051.jpg" },
+      { src: "fotos/IMG-20250908-WA0052.jpg" },
+      { src: "fotos/IMG-20250908-WA0053.jpg" },
+      { src: "fotos/IMG-20250908-WA0054.jpg" },
+      { src: "fotos/IMG-20250908-WA0055.jpg" },
+      { src: "fotos/IMG-20250908-WA0062.jpg" },
+      { src: "fotos/IMG-20250908-WA0063.jpg" },
+      { src: "fotos/IMG-20250908-WA0064.jpg" },
+      { src: "fotos/IMG-20250908-WA0065.jpg" },
+      { src: "fotos/IMG-20250908-WA0066.jpg" },
+      { src: "fotos/IMG-20250909-WA0024.jpg" },
+      { src: "fotos/IMG-20250909-WA0025.jpg" },
+      { src: "fotos/IMG-20250909-WA0027.jpg" },
+      { src: "fotos/IMG-20250909-WA0028.jpg" },
+      { src: "fotos/IMG-20250909-WA0029.jpg" },
+      { src: "fotos/IMG-20250909-WA0030.jpg" },
+      { src: "fotos/IMG-20250909-WA0032.jpg" },
+      { src: "fotos/IMG-20250909-WA0033.jpg" },
+      { src: "fotos/IMG-20250909-WA0034.jpg" },
+      { src: "fotos/IMG-20250909-WA0035.jpg" },
+      { src: "fotos/IMG-20250909-WA0036.jpg" },
+      { src: "fotos/IMG-20250909-WA0037.jpg" },
+      { src: "fotos/IMG-20250909-WA0038.jpg" },
+      { src: "fotos/IMG-20250909-WA0039.jpg" },
+      { src: "fotos/IMG-20250909-WA0040.jpg" },
+      { src: "fotos/IMG-20250909-WA0041.jpg" },
+      { src: "fotos/IMG-20250909-WA0042.jpg" },
+      { src: "fotos/IMG-20250909-WA0043.jpg" },
+      { src: "fotos/IMG-20250909-WA0044.jpg" },
+      { src: "fotos/IMG-20250909-WA0045.jpg" },
+      { src: "fotos/IMG-20250909-WA0047.jpg" },
+      { src: "fotos/IMG-20250909-WA0048.jpg" },
+      { src: "fotos/IMG-20250909-WA0049.jpg" },
+      { src: "fotos/IMG-20250909-WA0050.jpg" },
+      { src: "fotos/IMG-20250909-WA0051.jpg" },
+      { src: "fotos/IMG-20250909-WA0052.jpg" },
+      { src: "fotos/IMG-20250909-WA0053.jpg" },
+      { src: "fotos/IMG-20250909-WA0054.jpg" },
+      { src: "fotos/IMG-20250909-WA0055.jpg" },
+      { src: "fotos/IMG-20250909WA0056.jpg" }
+    ];
+
+    const galeriaEl = document.getElementById('galeria');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector(".lightbox .close");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    const abrirNovaAbaBtn = document.getElementById("abrir-nova-aba");
+    const compartilharBtn = document.getElementById("compartilhar");
+
+    let currentIndex = 0;
+
+    // Monta galeria
+    items.forEach((item, index) => {
+      const container = document.createElement('div');
+      container.classList.add('foto-container');
+
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = "Foto do Chá da Evelyn";
+      img.onclick = () => openLightbox(index);
+      container.appendChild(img);
+
+      const legenda = document.createElement('div');
+      legenda.classList.add('legenda');
+      legenda.innerText = "✨ Meu Chá de Bebê – 06/09 ✨";
+      container.appendChild(legenda);
+
+      galeriaEl.appendChild(container);
+    });
+
+    function openLightbox(index){
+      currentIndex = index;
+      lightboxImg.src = items[index].src;
+      lightbox.style.display = 'flex';
+    }
+
+    closeBtn.onclick = () => { lightbox.style.display = 'none'; };
+    prevBtn.onclick = () => { currentIndex = (currentIndex - 1 + items.length) % items.length; openLightbox(currentIndex); };
+    nextBtn.onclick = () => { currentIndex = (currentIndex + 1) % items.length; openLightbox(currentIndex); };
+    abrirNovaAbaBtn.onclick = () => { window.open(items[currentIndex].src, '_blank'); };
+    compartilharBtn.onclick = () => {
+      if(navigator.share){
+        navigator.share({title:'Meu Chá de Bebê', url: items[currentIndex].src})
+          .catch(console.error);
+      } else {
+        alert('Compartilhamento não suportado neste navegador.');
+      }
+    };
   </script>
 </body>
 </html>
