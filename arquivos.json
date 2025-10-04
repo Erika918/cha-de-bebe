@@ -640,6 +640,30 @@
     "type": "image"
   },
   {
+    "src": "fotos/IMG-20250928-WA0004.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG-20250928-WA0005.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG-20250928-WA0006.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG-20250928-WA0007.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG-20250928-WA0008.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG-20251003-WA0106.jpeg",
+    "type": "image"
+  },
+  {
     "src": "fotos/IMG_20250906_153524.jpg",
     "type": "image"
   },
@@ -760,6 +784,34 @@
     "type": "image"
   },
   {
+    "src": "fotos/IMG_20250924_123306.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250928_045402.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250928_045408.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250928_045429.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250929_165843.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250929_165848.jpg",
+    "type": "image"
+  },
+  {
+    "src": "fotos/IMG_20250929_170050.jpg",
+    "type": "image"
+  },
+  {
     "src": "fotos/VID-20250908-WA0056.mp4",
     "type": "video"
   },
@@ -788,6 +840,18 @@
     "type": "video"
   },
   {
+    "src": "fotos/VID-20250926-WA0005.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID-20250926-WA0006.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID-20250929-WA0049.mp4",
+    "type": "video"
+  },
+  {
     "src": "fotos/VID_20250907_070248_104.mp4",
     "type": "video"
   },
@@ -809,6 +873,26 @@
   },
   {
     "src": "fotos/VID_20250916_095925.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID_20250926_153447.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID_20250928_045545.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID_20250928_045942.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID_20250929_085357.mp4",
+    "type": "video"
+  },
+  {
+    "src": "fotos/VID_20251003_094106.mp4",
     "type": "video"
   }
 ]
